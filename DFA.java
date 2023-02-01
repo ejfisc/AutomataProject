@@ -2,16 +2,16 @@ public class DFA {
 
     int[][] transitionTable;
     int[] finalStates;
-    int initState;
+    int initState; // assumed to be 0
 
     // constructor takes in a transition array and array of finalStates
-    public DFA(int[][] transitionTable, int[] finalStates, int initState) {
+    public DFA(int[][] transitionTable, int[] finalStates) {
         if(transitionTable == null || finalStates == null) {
             throw new IllegalArgumentException();
         }
         this.transitionTable = transitionTable;
         this.finalStates = finalStates;
-        this.initState = initState;
+        initState = 0;
         
     }
 
