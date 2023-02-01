@@ -16,7 +16,7 @@ public class DFA {
     }
 
     // determine if the input string will be accepted (true) or rejected (false) by the automata
-    boolean run(String input) {
+    public boolean run(String input) {
         int currState = initState;
 
         for(int i = 0; i < input.length(); i++) {
@@ -36,7 +36,7 @@ public class DFA {
             return false;
     }
 
-    public static boolean contains(final int[] arr, final int key) {
+    boolean contains(final int[] arr, final int key) {
         for (int element : arr) {
             if(element == key) {
                 return true;
