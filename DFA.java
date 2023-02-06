@@ -1,8 +1,13 @@
-public class DFA {
+import java.util.List;
+import java.util.Map;
 
-    int[][] transitionTable; // transitionTable[currentState][input] = nextState
-    int[] finalStates;
-    int initState;
+public class DFA implements FSA {
+
+    private int[][] transitionTable; // transitionTable[currentState][input] = nextState
+    private int[] finalStates;
+    private int initState;
+	private String[] states;
+	private String[] alphabet;
 
     // constructor takes in a transition array and array of finalStates
     public DFA(int[][] transitionTable, int[] finalStates) {
@@ -41,6 +46,35 @@ public class DFA {
         }
         return false;
     }
+
+	@Override
+	public void setStates(String[] states) { this.states = states; }
+
+	@Override
+	public void setAlphabet(String[] alphabet) { this.alphabet = alphabet; }
+
+	@Override
+	public void setTransitionFunction(Map<String, Map<String, List<String>>> matrix) {
+		this.transitionTable = matrix; // this isn't right
+	}
+
+	@Override
+	public void setInitialState(String state) {
+		this.initState = Integer.parseInt(state);
+		
+	}
+
+	@Override
+	public void setFinalStates(String[] states) {
+		this.finalStates = Integer.parseInt(states); // also not right
+		
+	}
+
+	@Override
+	public boolean checkString(String input) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }
 
 
