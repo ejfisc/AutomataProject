@@ -1,13 +1,12 @@
-import java.util.List;
-import java.util.Map;
-
-public class DFA implements FSA {
+/* Class constructs a DFA given sufficient data, 
+ * and is able to determine whether to accept
+ * or reject a string given the DFA construction. 
+ */
+public class DFA {
 
     private int[][] transitionTable; // transitionTable[currentState][input] = nextState
     private int[] finalStates;
     private int initState;
-	private String[] states;
-	private String[] alphabet;
 
     // constructor takes in a transition array and array of finalStates
     public DFA(int[][] transitionTable, int[] finalStates) {
@@ -46,35 +45,6 @@ public class DFA implements FSA {
         }
         return false;
     }
-
-	@Override
-	public void setStates(String[] states) { this.states = states; }
-
-	@Override
-	public void setAlphabet(String[] alphabet) { this.alphabet = alphabet; }
-
-	@Override
-	public void setTransitionFunction(Map<String, Map<String, List<String>>> matrix) {
-		this.transitionTable = matrix; // this isn't right
-	}
-
-	@Override
-	public void setInitialState(String state) {
-		this.initState = Integer.parseInt(state);
-		
-	}
-
-	@Override
-	public void setFinalStates(String[] states) {
-		this.finalStates = Integer.parseInt(states); // also not right
-		
-	}
-
-	@Override
-	public boolean checkString(String input) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 }
 
 

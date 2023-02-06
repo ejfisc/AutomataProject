@@ -1,9 +1,9 @@
-
+/* Tester class created by classmates that uses the DFA class
+ * Program creates three DFAs, tests them using DFA.java, and returns whether we accept or reject a string. 
+ */
 public class Tester {
 
 	public static void main(String[] args) {
-		// TODO taken from discord, probably need to mold it to our needs
-		
 	    /*    
 	      The professor defined that the alphabet is {0, 1} so we can use the indexes in our 2D int array directly
 	      We'll also define each state from 0-N
@@ -19,7 +19,7 @@ public class Tester {
 		 * Answer sheet:
 		 * DFA one should accept:   000010, 0010
 		 * DFA two should accept:   1100100
-		 * DFA three should accept: 111000
+		 * DFA three should accept: 1110001
 		 */
 		// A DFA that will check if a string ends in "10"
 		int[][] tOne = new int[3][2];
