@@ -1,8 +1,8 @@
 public class DFA {
 
-    int[][] transitionTable;
+    int[][] transitionTable; // transitionTable[currentState][input] = nextState
     int[] finalStates;
-    int initState; // assumed to be 0
+    int initState;
 
     // constructor takes in a transition array and array of finalStates
     public DFA(int[][] transitionTable, int[] finalStates) {
@@ -11,22 +11,18 @@ public class DFA {
         }
         this.transitionTable = transitionTable;
         this.finalStates = finalStates;
-        initState = 0;
-        
+        initState = 0; // agreed to default to 0 in class
     }
 
     // determine if the input string will be accepted (true) or rejected (false) by the automata
-    public boolean run(String input) {
+    public boolean run(String testStr) {
         int currState = initState;
 
-        for(int i = 0; i < input.length(); i++) {
-            char l = input.charAt(i);
-            if(l == '0') {
-                // set currState to next state using transitionTable
-            }
-            else { // l is '1'
-                // set currState to next state using transitionTable
-            }
+        // loop through string one by one
+        for(int i = 0; i < testStr.length(); i++) {
+            char ch = testStr.charAt(i);
+            int input = ch - '0'; // turns ch into int by subtracting the ascii value of '0' from the ascii value of ch
+            currState = transitionTable[currState][input]; // use transition table to determine next state
         }
         
         // check if the currState is a final state
@@ -36,6 +32,7 @@ public class DFA {
             return false;
     }
 
+    // helper method to determine if the current state is a final state
     boolean contains(final int[] arr, final int key) {
         for (int element : arr) {
             if(element == key) {
