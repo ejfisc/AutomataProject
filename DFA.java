@@ -51,6 +51,40 @@ public class DFA {
     
     // creates a DFA that accepts the intersection of M1 and M2
     public static DFA intersection(DFA m1, DFA m2) {
+        int numOfM1States = m1.transitionTable.length;
+        int numOfM2States = m2.transitionTable.length;
+        int[][] intersectionTransitions = new int[numOfM1States*numOfM2States][2];
+        /* Consider two 3 state DFAs, these would be the new states:
+         * 0 -> m1_0, m2_0
+         * 1 -> m1_0, m2_1
+         * 2 -> m1_0, m2_2
+         * 3 -> m1_1, m2_0
+         * 4 -> m1_1, m2_1
+         * 5 -> m1_1, m2_2
+         * 6 -> m1_2, m2_0
+         * 7 -> m1_2, m2_1
+         * 8 -> m1_2, m2_2
+         */
+
+        int nextM1State = 0;
+        int nextM2State = 0;
+        // fill in the new transition table
+        /* to determine which state in the intersection state table to put a transition, we use
+        intersect state = (m1 state * # of m1 states) + m2 state */
+        for(int i = 0; i < intersectionTransitions.length; i++) {
+            for(int j = 0; j < numOfM1States; j++) {
+                for(int k = 0; k < numOfM2States; k++) {
+                    // 0 transition
+                    nextM1State = m1.transitionTable[j][0];
+                    nextM2State = m2.transitionTable[k][0];
+                    intersectionTransitions[i][0] = (nextM1State * numOfM1States) + nextM2State;
+                    // 1 transition
+                    nextM1State = m1.transitionTable[j][1];
+                    nextM2State = m2.transitionTable[k][1];
+                    intersectionTransitions[i][1] = (nextM1State * numOfM1States) + nextM2State;
+                }
+            }
+        }
         return m1;
     }
     
@@ -63,7 +97,7 @@ public class DFA {
     public static DFA complement(DFA m) {
         ArrayList<Integer> temp = new ArrayList<>(); // used for creating the new final states list
 
-        // loop through states in m.transitionTable
+        // loop through states in m.transitionTable`
         for(int i = 0; i < m.transitionTable.length; i++) {
             // if the current state is not in m.finalStates, add that state to the list of final states for our new DFA 
             if(!contains(m.finalStates, i)) {
