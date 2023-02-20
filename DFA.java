@@ -51,41 +51,29 @@ public class DFA {
     
     // creates a DFA that accepts the intersection of M1 and M2
     public static DFA intersection(DFA m1, DFA m2) {
-        int numOfM1States = m1.transitionTable.length;
-        int numOfM2States = m2.transitionTable.length;
-        int[][] intersectionTransitions = new int[numOfM1States*numOfM2States][2];
-        /* Consider two 3 state DFAs, these would be the new states:
-         * 0 -> m1_0, m2_0
-         * 1 -> m1_0, m2_1
-         * 2 -> m1_0, m2_2
-         * 3 -> m1_1, m2_0
-         * 4 -> m1_1, m2_1
-         * 5 -> m1_1, m2_2
-         * 6 -> m1_2, m2_0
-         * 7 -> m1_2, m2_1
-         * 8 -> m1_2, m2_2
-         */
+        
+        ArrayList<Integer> temp = new ArrayList<>(); // used for creating the new final states list
 
-        int nextM1State = 0;
-        int nextM2State = 0;
-        // fill in the new transition table
-        /* to determine which state in the intersection state table to put a transition, we use
-        intersect state = (m1 state * # of m1 states) + m2 state */
-        for(int i = 0; i < intersectionTransitions.length; i++) {
-            for(int j = 0; j < numOfM1States; j++) {
-                for(int k = 0; k < numOfM2States; k++) {
-                    // 0 transition
-                    nextM1State = m1.transitionTable[j][0];
-                    nextM2State = m2.transitionTable[k][0];
-                    intersectionTransitions[i][0] = (nextM1State * numOfM1States) + nextM2State;
-                    // 1 transition
-                    nextM1State = m1.transitionTable[j][1];
-                    nextM2State = m2.transitionTable[k][1];
-                    intersectionTransitions[i][1] = (nextM1State * numOfM1States) + nextM2State;
-                }
+        int[][] transTable = combineTransitionTables(m1, m2);
+        
+        int m2State = 0;
+        int m1State = 0;
+        for(int i = 0; i < transTable.length; i++) {
+            // use the next intersection state = (next m1 state * num of m1 states) + next m2 state to derive which m1 state and m2 state the i state represents
+            m2State = i % m1.transitionTable.length;
+            m1State = (i - m2State) / m1.transitionTable.length;
+
+            // because this is intersection, check if both of those states are considered final states for their respective DFAs
+            if(contains(m1.finalStates, m1State) && contains(m2.finalStates, m2State)) {
+                temp.add(i); // this is a final state
             }
         }
-        return m1;
+
+        int[] finStates = temp.stream().mapToInt(i -> i).toArray(); // convert the Integer ArrayList 'temp' to primitive int array
+
+        DFA intersection = new DFA(transTable, finStates);
+
+        return intersection;
     }
     
     // creates a DFA that accepts the set difference of M1 and M2 (set of strings accepted by M1 but not M2)
@@ -119,7 +107,7 @@ public class DFA {
     }
     
     // helper method to determine if the current state is a final state
-    static boolean contains(final int[] arr, final int key) {
+    private static boolean contains(final int[] arr, final int key) {
         for (int element : arr) {
             if(element == key) {
                 return true;
@@ -127,6 +115,49 @@ public class DFA {
         }
         return false;
     }
+
+    private static int[][] combineTransitionTables(DFA m1, DFA m2) {
+        int numOfM1States = m1.transitionTable.length;
+        int numOfM2States = m2.transitionTable.length;
+        int[][] intersectionTransitions = new int[numOfM1States*numOfM2States][2]; // new transition table
+
+        /* Consider two 3 state DFAs, these would be the new states:
+         * 0 -> m1_0, m2_0
+         * 1 -> m1_0, m2_1
+         * 2 -> m1_0, m2_2
+         * 3 -> m1_1, m2_0
+         * 4 -> m1_1, m2_1
+         * 5 -> m1_1, m2_2
+         * 6 -> m1_2, m2_0
+         * 7 -> m1_2, m2_1
+         * 8 -> m1_2, m2_2
+         * to determine which state in the intersection state table to put a transition, we use
+         next intersect state = (next m1 state * # of m1 states) + next m2 state */
+         
+         int nxtM1_0State = 0; 
+         int nxtM1_1State = 0;
+         int nxtM2State = 0;
+         for(int i = 0; i < intersectionTransitions.length; i++) {
+             for(int j = 0; j < numOfM1States; j++) {
+                 /* I split the next M1 state into two because it allowed me to take the next m1 state computation out of the m2 loop so it's more efficient,
+                 But I needed to be able to remember what the next state was for both inputs. */
+                 nxtM1_0State = m1.transitionTable[j][0];
+                 nxtM1_1State = m1.transitionTable[j][1];
+                 for(int k = 0; k < numOfM2States; k++) {
+                     // 0 transition
+                     nxtM2State = m2.transitionTable[k][0];
+                     intersectionTransitions[i][0] = (nxtM1_0State * numOfM1States) + nxtM2State;
+                     // 1 transition
+                     nxtM2State = m2.transitionTable[k][1];
+                     intersectionTransitions[i][1] = (nxtM1_1State * numOfM1States) + nxtM2State;
+                 }
+             }
+         }
+
+         return intersectionTransitions;
+    }
+
+
 }
 
 
