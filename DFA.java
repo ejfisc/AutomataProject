@@ -78,7 +78,29 @@ public class DFA {
     
     // creates a DFA that accepts the set difference of M1 and M2 (set of strings accepted by M1 but not M2)
     public static DFA difference(DFA m1, DFA m2) {
-        return m1;
+    	
+    	// i think this way would work too, possibly even better than this longer way
+    	// m2 = complement(m2);
+    	// return intersection(m1, m2);
+    	
+    	
+    	ArrayList<Integer> temp = new ArrayList<>(); // used for creating the new final states list	
+    	
+    	// loop for length of original transition table
+    	for(int i = 0; i < m1.transitionTable.length; i++) {
+    		
+    		// if this state is a final state in m1 and not a final state in m2
+    		if (m1.finalStates[i] == 1 && m2.finalStates[i] != 1) {
+    			temp.add(i);
+    		}
+    	}
+    	
+    	int[][] transTable = combineTransitionTables(m1, m2); // combine transition tables
+    	int[] finStates = temp.stream().mapToInt(i -> i).toArray(); // convert the Integer ArrayList 'temp' to primitive int array
+    	
+    	DFA difference = new DFA(transTable, finStates);
+    	
+        return difference;
     }
     
     // creates a DFA that is the complement of the given DFA (swap the final and non-final states)
@@ -102,7 +124,7 @@ public class DFA {
     
     // credits function, prints out names of the group members (so that the grader can easily see who contributed while running the Tester class)
     public static String credits() {
-        String credits = "Credits: Ethan Fischer, John Lawler, Luke wells";
+        String credits = "Credits: Ethan Fischer, John Lawler, Luke Wells";
         return credits;
     }
     
