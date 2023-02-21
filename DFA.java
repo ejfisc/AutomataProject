@@ -46,7 +46,19 @@ public class DFA {
     
     // creates a DFA that accepts the union of M1 and M2
     public static DFA union(DFA m1, DFA m2) {
-        return m1;
+        ArrayList<Integer> temp = new ArrayList<>(); // used for creating the new final states list
+        int[][] unionTable = combineTransitionTables(m1, m2); // combine transition tables
+
+        for(int i = 0; i < unionTable.length; i++) {
+            if (m1.finalStates[i] == 1 || m2.finalStates[i] == 1) {
+                temp.add(i);
+            }
+        }
+
+        int[] finStates = temp.stream().mapToInt(i -> i).toArray(); // convert the Integer ArrayList 'temp' to primitive int array
+        DFA union = new DFA(unionTable, finStates);
+
+        return union;
     }
     
     // creates a DFA that accepts the intersection of M1 and M2
