@@ -43,14 +43,20 @@ public class DFA {
         else
         return false;
     }
-    
+
+
     // creates a DFA that accepts the union of M1 and M2
     public static DFA union(DFA m1, DFA m2) {
         ArrayList<Integer> temp = new ArrayList<>(); // used for creating the new final states list
         int[][] unionTable = combineTransitionTables(m1, m2); // combine transition tables
 
+        int m2State = 0;
+        int m1State = 0;
         for(int i = 0; i < unionTable.length; i++) {
-            if (m1.finalStates[i] == 1 || m2.finalStates[i] == 1) {
+            m2State = i % m1.transitionTable.length;
+            m1State = (i - m2State) / m1.transitionTable.length;
+
+            if(contains(m1.finalStates, m1State) || contains(m2.finalStates, m2State)) {
                 temp.add(i);
             }
         }
@@ -60,7 +66,7 @@ public class DFA {
 
         return union;
     }
-    
+
     // creates a DFA that accepts the intersection of M1 and M2
     public static DFA intersection(DFA m1, DFA m2) {
         

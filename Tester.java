@@ -112,6 +112,7 @@ public class Tester {
 		testsRan += testStrings.length;
 
 		//Testing the union, intersection, difference, and complement
+		// Union Fails Most Tests
 		testsPassed += test(DFA.union(one, two), "DFA one OR two", testStrings, new boolean[]{true, false, true, true, false, false});
 		testsRan += testStrings.length;
 
@@ -124,6 +125,7 @@ public class Tester {
 		testsPassed += test(DFA.intersection(three, four), "DFA three AND four", testStrings, new boolean[]{false, true, false, false, false, false});
 		testsRan += testStrings.length;
 
+		// Intersection Completely Breaks Here \/
 		testsPassed += test(DFA.intersection(three, six), "DFA three AND six", testStrings, new boolean[]{false, true, false, false, false, true});
 		testsRan += testStrings.length;
 
