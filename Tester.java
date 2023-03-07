@@ -22,152 +22,275 @@ public class Tester {
         String[] testStrings = {"000010", "1110001", "0010", "1100100", "", "0010010110011"};
 
         // A DFA that will check if a string ends in "10"
-        int[][] testOneTransitionTable = new int[3][2];
+        int[][] tOne = new int[3][2];
 
         // format is as follows
         // transitionTable[currentState][currentInput] = nextState
-        testOneTransitionTable[0][1] = 1; // at state 0, if 1 is input, transition to state 1
-        testOneTransitionTable[0][0] = 0;
-        testOneTransitionTable[1][0] = 2;
-        testOneTransitionTable[1][1] = 1;
-        testOneTransitionTable[2][0] = 0;
-        testOneTransitionTable[2][1] = 1;
-        int[] testOneFinalStates = {2};
+        tOne[0][1] = 1; // at state 0, if 1 is input, transition to state 1
+        tOne[0][0] = 0;
+        tOne[1][0] = 2;
+        tOne[1][1] = 1;
+        tOne[2][0] = 0;
+        tOne[2][1] = 1;
+        int[] fOne = {2};
 
         // A DFA that will check if a string has an odd number of "1" and ends in at
         // least two "0"
-        int[][] testTwoTransitionTable = new int[4][2];
-        testTwoTransitionTable[0][1] = 1;
-        testTwoTransitionTable[0][0] = testTwoTransitionTable[1][1] = testTwoTransitionTable[2][1] = testTwoTransitionTable[3][1] = 0;
-        testTwoTransitionTable[1][0] = 2;
-        testTwoTransitionTable[2][0] = testTwoTransitionTable[3][0] = 3;
-        int[] testTwoFinalStates = {3};
+        int[][] tTwo = new int[4][2];
+        tTwo[0][1] = 1;
+        tTwo[0][0] = tTwo[1][1] = tTwo[2][1] = tTwo[3][1] = 0;
+        tTwo[1][0] = 2;
+        tTwo[2][0] = tTwo[3][0] = 3;
+        int[] fTwo = {3};
 
         // A DFA that will check if a string has an even number of "1" and an odd
         // number of "0"
-        int[][] testThreeTransitionTable = new int[4][2];
-        testThreeTransitionTable[0][0] = 1;
-        testThreeTransitionTable[0][1] = 2;
-        testThreeTransitionTable[1][0] = 0;
-        testThreeTransitionTable[1][1] = 3;
-        testThreeTransitionTable[2][0] = 3;
-        testThreeTransitionTable[2][1] = 0;
-        testThreeTransitionTable[3][0] = 2;
-        testThreeTransitionTable[3][1] = 1;
-        int[] testThreeFinalStates = {1};
+        int[][] tThree = new int[4][2];
+        tThree[0][0] = 1;
+        tThree[0][1] = 2;
+        tThree[1][0] = 0;
+        tThree[1][1] = 3;
+        tThree[2][0] = 3;
+        tThree[2][1] = 0;
+        tThree[3][0] = 2;
+        tThree[3][1] = 1;
+        int[] fThree = {1};
 
         // A DFA that will accept strings whose second to last symbol is '0'
-        int[][] testFourTransitionTable = new int[4][2];
-        testFourTransitionTable[0][0] = 1;
-        testFourTransitionTable[0][1] = 0;
-        testFourTransitionTable[1][0] = 3;
-        testFourTransitionTable[1][1] = 2;
-        testFourTransitionTable[2][0] = 1;
-        testFourTransitionTable[2][1] = 0;
-        testFourTransitionTable[3][0] = 3;
-        testFourTransitionTable[3][1] = 2;
-        int[] testFourFinalStates = {2, 3};
+        int[][] tFour = new int[4][2];
+        tFour[0][0] = 1;
+        tFour[0][1] = 0;
+        tFour[1][0] = 3;
+        tFour[1][1] = 2;
+        tFour[2][0] = 1;
+        tFour[2][1] = 0;
+        tFour[3][0] = 3;
+        tFour[3][1] = 2;
+        int[] fFour = {2, 3};
 
         // A DFA that will only accept empty strings
-        int[][] testFiveTransitionTable = new int[2][2];
-        testFiveTransitionTable[0][0] = 1;
-        testFiveTransitionTable[0][1] = 1;
-        testFiveTransitionTable[1][0] = 1;
-        testFiveTransitionTable[1][1] = 1;
-        int[] testFiveFinalStates = {0};
+        int[][] tFive = new int[2][2];
+        tFive[0][0] = 1;
+        tFive[0][1] = 1;
+        tFive[1][0] = 1;
+        tFive[1][1] = 1;
+        int[] fFive = {0};
         
-        //A DFA that accepts strings that end in 1
-        int[][] testSixTransitionTable = new int[2][2];
-        testSixTransitionTable[0][0] = 0;
-        testSixTransitionTable[0][1] = 1;
-        testSixTransitionTable[1][0] = 0;
-        testSixTransitionTable[1][1] = 1;
-        int[] testSixFinalStates = {1};
+        // A DFA that accepts strings that end in 1
+        int[][] tSix = new int[2][2];
+        tSix[0][0] = 0;
+        tSix[0][1] = 1;
+        tSix[1][0] = 0;
+        tSix[1][1] = 1;
+        int[] fSix = {1};
 
-        DFA one = new DFA(testOneTransitionTable, testOneFinalStates);
-        DFA two = new DFA(testTwoTransitionTable, testTwoFinalStates);
-        DFA three = new DFA(testThreeTransitionTable, testThreeFinalStates);
-        DFA four = new DFA(testFourTransitionTable, testFourFinalStates);
-        DFA five = new DFA(testFiveTransitionTable, testFiveFinalStates);
-        DFA six = new DFA(testSixTransitionTable, testSixFinalStates);
+		/*
+		 * NOTE: These are new cases made specifcally for part 3 of the project.
+		 */
+		// A DFA that accepts nothing
+		int[][] tSeven = new int[3][2];
+		tSeven[0][0] = 0;
+		tSeven[0][1] = 1;
+		tSeven[1][0] = 0;
+		tSeven[1][1] = 1;
+		int[] fSeven = {};
+
+		// A DFA that accepts strings with only one "1"
+		int[][] tEight = new int[3][2];
+		tEight[0][0] = 0;
+		tEight[0][1] = tEight[1][0] = 1;
+		tEight[1][1] = 2;
+		tEight[2][0] = tEight[2][1] = 2;
+		int[] fEight = {1};
+
+		// A DFA that accepts odd length strings
+		int[][] tNine = new int[2][2];
+		tNine[0][0] = tNine[0][1] = 1;
+		tNine[1][0] = tNine[1][1] = 0;
+		int[] fNine = {1};
+
+		// A DFA that only accepts a string of 1/0 or empty
+		int[][] tTen = new int[3][2];
+		tTen[0][0] = tTen[0][1] = 1;
+		tTen[1][0] = tTen[1][1] = 2;
+		tTen[2][0] = tTen[2][1] = 2;
+		int[] fTen = {0, 1};
+
+		// A DFA that only accepts the string "1010"
+		int[][] tEleven = new int[6][2];
+		tEleven[0][1] = 1;
+		tEleven[1][0] = 2;
+		tEleven[2][1] = 3;
+		tEleven[3][0] = 4;
+		tEleven[4][0] = tEleven[4][1] = tEleven[0][0] = tEleven[1][1] = tEleven[2][0] = tEleven[3][1] = 5;
+		tEleven[5][0] = tEleven[5][1] = 5;
+		int[] fEleven = {4};
+
+		// A DFA that accepts everything
+		int[][] tTwelve = new int[2][2];
+		tTwelve[0][1] = 1;
+		tTwelve[1][1] = 1;
+		tTwelve[1][0] = 0;
+		tTwelve[0][0] = 0;
+		int[] fTwelve = {0, 1};
+
+        DFA one = new DFA(tOne, fOne);
+        DFA two = new DFA(tTwo, fTwo);
+        DFA three = new DFA(tThree, fThree);
+        DFA four = new DFA(tFour, fFour);
+        DFA five = new DFA(tFive, fFive);
+        DFA six = new DFA(tSix, fSix);
+		DFA seven = new DFA(tSeven, fSeven);
+		DFA eight = new DFA(tEight, fEight);
+		DFA nine = new DFA(tNine, fNine);
+		DFA ten = new DFA(tTen, fTen);
+		DFA eleven = new DFA(tEleven, fEleven);
+		DFA twelve = new DFA(tTwelve, fTwelve);
 
         int testsPassed = 0;
         int testsRan = 0;
 
         // Test each
-        testsPassed += test(one, "one", testStrings, new boolean[]{true, false, true, false, false, false});
+        testsPassed += test(one, "one", testStrings, 
+				new boolean[]{true, false, true, false, false, false});
         testsRan += testStrings.length;
 
-        testsPassed += test(two, "two", testStrings, new boolean[]{false, false, false, true, false, false});
+        testsPassed += test(two, "two", testStrings, 
+				new boolean[]{false, false, false, true, false, false});
         testsRan += testStrings.length;
 
-        testsPassed += test(three, "three", testStrings, new boolean[]{false, true, false, false, false, true});
+        testsPassed += test(three, "three", testStrings, 
+				new boolean[]{false, true, false, false, false, true});
         testsRan += testStrings.length;
 
-        testsPassed += test(four, "four", testStrings, new boolean[]{false, true, false, true, false, false});
+        testsPassed += test(four, "four", testStrings, 
+				new boolean[]{false, true, false, true, false, false});
         testsRan += testStrings.length;
 
-        testsPassed += test(five, "five", testStrings, new boolean[]{false, false, false, false, true, false});
+        testsPassed += test(five, "five", testStrings, 
+				new boolean[]{false, false, false, false, true, false});
         testsRan += testStrings.length;
         
-        testsPassed += test(six, "six", testStrings, new boolean[]{false, true, false, false, false, true});
+        testsPassed += test(six, "six", testStrings, 
+				new boolean[]{false, true, false, false, false, true});
         testsRan += testStrings.length;
-        
+
+        testsPassed += test(seven, "seven", testStrings, 
+				new boolean[]{false, false, false, false, false, false});
+        testsRan += testStrings.length;
+		
+        testsPassed += test(eight, "eight", testStrings, 
+				new boolean[]{true, false, true, false, false, false});
+        testsRan += testStrings.length;
+
+        testsPassed += test(nine, "nine", testStrings, 
+				new boolean[]{false, true, false, true, false, true});
+        testsRan += testStrings.length;
+
+        testsPassed += test(ten, "ten", testStrings, 
+				new boolean[]{false, false, false, false, true, false});
+        testsRan += testStrings.length;
+
+        testsPassed += test(eleven, "eleven", testStrings, 
+				new boolean[]{false, false, false, false, false, false});
+        testsRan += testStrings.length;
+		
+        testsPassed += test(twelve, "twelve", testStrings, 
+				new boolean[]{true, true, true, true, true, true});
+        testsRan += testStrings.length;
+
         //Testing the union, intersection, difference, and complement
-        testsPassed += test(DFA.union(one, two), "one OR two", testStrings, new boolean[]{true, false, true, true, false, false});
+        testsPassed += test(DFA.union(one, two), "one OR two", testStrings, 
+				new boolean[]{true, false, true, true, false, false});
         testsRan += testStrings.length;
         
-        testsPassed += test(DFA.union(one, five), "one OR five", testStrings, new boolean[]{true, false, true, false, true, false});
+        testsPassed += test(DFA.union(one, five), "one OR five", testStrings, 
+				new boolean[]{true, false, true, false, true, false});
         testsRan += testStrings.length;
         
-        testsPassed += test(DFA.union(two, four), "two OR four", testStrings, new boolean[]{false, true, false, true, false, false});
+        testsPassed += test(DFA.union(two, four), "two OR four", testStrings, 
+				new boolean[]{false, true, false, true, false, false});
         testsRan += testStrings.length;
         
-        testsPassed += test(DFA.union(five, six), "five OR six", testStrings, new boolean[]{false, true, false, false, true, true});
+        testsPassed += test(DFA.union(five, six), "five OR six", testStrings, 
+				new boolean[]{false, true, false, false, true, true});
         testsRan += testStrings.length;
         
-        testsPassed += test(DFA.intersection(three, four), "three AND four", testStrings, new boolean[]{false, true, false, false, false, false});
+        testsPassed += test(DFA.intersection(three, four), "three AND four", testStrings, 
+				new boolean[]{false, true, false, false, false, false});
         testsRan += testStrings.length;
         
-        testsPassed += test(DFA.intersection(three, six), "three AND six", testStrings, new boolean[]{false, true, false, false, false, true});
+        testsPassed += test(DFA.intersection(three, six), "three AND six", testStrings, 
+				new boolean[]{false, true, false, false, false, true});
         testsRan += testStrings.length;
         
-        testsPassed += test(DFA.intersection(four, six), "four AND six", testStrings, new boolean[]{false, true, false, false, false, false});
+        testsPassed += test(DFA.intersection(four, six), "four AND six", testStrings, 
+				new boolean[]{false, true, false, false, false, false});
         testsRan += testStrings.length;
         
-        testsPassed += test(DFA.intersection(one, five), "one AND five", testStrings, new boolean[]{false, false, false, false, false, false});
+        testsPassed += test(DFA.intersection(one, five), "one AND five", testStrings, 
+				new boolean[]{false, false, false, false, false, false});
         testsRan += testStrings.length;
         
-        testsPassed += test(DFA.difference(three, four), "three - four", testStrings, new boolean[]{false, false, false, false, false, true});
+        testsPassed += test(DFA.difference(three, four), "three - four", testStrings, 
+				new boolean[]{false, false, false, false, false, true});
         testsRan += testStrings.length;
         
-        testsPassed += test(DFA.difference(four, three), "four - three", testStrings, new boolean[]{false, false, false, true, false, false});
+        testsPassed += test(DFA.difference(four, three), "four - three", testStrings, 
+				new boolean[]{false, false, false, true, false, false});
         testsRan += testStrings.length;
         
-        testsPassed += test(DFA.difference(two, one), "two - one", testStrings, new boolean[]{false, false, false, true, false, false});
+        testsPassed += test(DFA.difference(two, one), "two - one", testStrings, 
+				new boolean[]{false, false, false, true, false, false});
         testsRan += testStrings.length;
         
-        testsPassed += test(DFA.difference(four, two), "four - two", testStrings, new boolean[]{false, true, false, false, false, false});
+        testsPassed += test(DFA.difference(four, two), "four - two", testStrings, 
+				new boolean[]{false, true, false, false, false, false});
         testsRan += testStrings.length;
         
-        testsPassed += test(DFA.complement(one), "Complement of one", testStrings, new boolean[]{false, true, false, true, true, true});
+        testsPassed += test(DFA.complement(one), "Complement of one", testStrings, 
+				new boolean[]{false, true, false, true, true, true});
         testsRan += testStrings.length;
         
-        testsPassed += test(DFA.complement(two), "Complement of two", testStrings, new boolean[]{true, true, true, false, true, true});
+        testsPassed += test(DFA.complement(two), "Complement of two", testStrings, 
+				new boolean[]{true, true, true, false, true, true});
         testsRan += testStrings.length;
         
-        testsPassed += test(DFA.complement(three), "Complement of three", testStrings, new boolean[]{true, false, true, true, true, false});
+        testsPassed += test(DFA.complement(three), "Complement of three", testStrings, 
+				new boolean[]{true, false, true, true, true, false});
         testsRan += testStrings.length;
         
-        testsPassed += test(DFA.complement(four), "Complement of four", testStrings, new boolean[]{true, false, true, false, true, true});
+        testsPassed += test(DFA.complement(four), "Complement of four", testStrings, 
+				new boolean[]{true, false, true, false, true, true});
         testsRan += testStrings.length;
         
-        testsPassed += test(DFA.complement(five), "Complement of five", testStrings, new boolean[]{true, true, true, true, false, true});
+        testsPassed += test(DFA.complement(five), "Complement of five", testStrings, 
+				new boolean[]{true, true, true, true, false, true});
         testsRan += testStrings.length;
         
-        testsPassed += test(DFA.complement(six), "Complement of six", testStrings, new boolean[]{true, false, true, true, true, false});
+        testsPassed += test(DFA.complement(six), "Complement of six", testStrings, 
+				new boolean[]{true, false, true, true, true, false});
         testsRan += testStrings.length;
         
+		testsPassed += emptyChecker(new DFA[]{one, two, three, four, five, six, seven, eight, nine, ten, eleven, twelve},
+								new boolean[]{false, false, false, false, false, false, true, false, false, false, false, false});
+		testsRan += 12;
+
+		testsPassed += universalChecker(new DFA[]{one, two, three, four, five, six, seven, eight, nine, ten, eleven, twelve},
+									new boolean[]{false, false, false, false, false, false, false, false, false, false, false, true});
+		testsRan += 12;
+
+		testsPassed += infiniteChecker(new DFA[]{one, two, three, four, five, six, seven, eight, nine, ten, eleven, twelve},
+									new boolean[]{true, true, true, true, false, true, false, true, true, false, false, true});
+		testsRan += 12;
+
+		testsPassed += subsetChecker(new DFA[][]{{eight, ten}, {eleven, one}, {one, two}, {seven, twelve}},
+				new boolean[]{false, true, false, true});
+		testsRan += 4;
+
+		testsPassed += equalsChecker(new DFA[][]{{ten, eight}, {eleven, one}, {one, two}, {seven, twelve}},
+				new boolean[]{false, false, false, false});
+		testsRan += 4;
 
 		System.out.println();
 		for(int i = 0; i < failed.size(); i++)
@@ -204,4 +327,84 @@ public class Tester {
 
         return testsPassed;
     }
+
+	public static int emptyChecker(DFA[] dfaList, boolean[] desiredTestResults) {
+		int testsPassed = 0;
+
+		for(int i = 0; i < dfaList.length; i++) {
+			if(dfaList[i].isEmptyLanguage() != desiredTestResults[i]) {
+				if(desiredTestResults[i])
+					failed.add("DFA " + i + ": incorrectly stated it was NOT empty\n");
+				else
+					failed.add("DFA " + i + ": incorrectly stated it was empty\n");
+			}
+			else
+				testsPassed++;
+		}
+		return testsPassed;
+	}
+
+	public static int universalChecker(DFA[] dfaList, boolean[] desiredTestResults) {
+		int testsPassed = 0;
+
+		for(int i = 0; i < dfaList.length; i++) {
+			if(dfaList[i].isUniversalLanguage() != desiredTestResults[i]) {
+				if(desiredTestResults[i])
+					failed.add("DFA " + i + ": incorrectly stated it was NOT universal\n");
+				else
+					failed.add("DFA " + i + ": incorrectly stated it was universal\n");
+			}
+			else
+				testsPassed++;
+		}
+		return testsPassed;
+	}
+	
+	public static int infiniteChecker(DFA[] dfaList, boolean[] desiredTestResults) {
+		int testsPassed = 0;
+
+		for(int i = 0; i < dfaList.length; i++) {
+			if(dfaList[i].isInfinite() != desiredTestResults[i]) {
+				if(desiredTestResults[i])
+					failed.add("DFA " + i + ": incorrectly stated it was NOT infinite\n");
+				else
+					failed.add("DFA " + i + ": incorrectly stated it was infinite\n");
+			}
+			else
+				testsPassed++;
+		}
+		return testsPassed;
+	}
+
+	public static int equalsChecker(DFA[][] dfaList, boolean[] desiredTestResults) {
+		int testsPassed = 0;
+
+		for(int i = 0; i < dfaList.length; i++) {
+			if(dfaList[i][0].equals(dfaList[i][1]) != desiredTestResults[i]) {
+				if(desiredTestResults[i])
+					failed.add("The DFAs in pair [" + i + "] incorrectly stated they were NOT equal\n");
+				else
+					failed.add("The DFAs in pair [" + i + "] incorrectly stated they were equal\n");
+			}
+			else
+				testsPassed++;
+		}
+		return testsPassed;
+	}
+
+	public static int subsetChecker(DFA[][] dfaList, boolean[] desiredTestResults) {
+		int testsPassed = 0;
+
+		for(int i = 0; i < dfaList.length; i++) {
+			if(dfaList[i][0].isSubsetOf(dfaList[i][1]) != desiredTestResults[i]) {
+				if(desiredTestResults[i])
+					failed.add("The first DFA in pair [" + i + "] incorrectly stated it was NOT a subset\n");
+				else
+					failed.add("The first DFA in pair [" + i + "] incorrectly stated it was a subset\n");
+			}
+			else
+				testsPassed++;
+		}
+		return testsPassed;
+	}
 }

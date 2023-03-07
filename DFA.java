@@ -45,7 +45,7 @@ public class DFA {
     }
 
 
-    // creates a DFA that accepts the union of M1 and M2
+    // creates a DFA that accepts the union of M1 and M2 (M1 or M2)
     public static DFA union(DFA m1, DFA m2) {
         ArrayList<Integer> temp = new ArrayList<>(); // used for creating the new final states list
         int[][] unionTable = combineTransitionTables(m1, m2); // combine transition tables
@@ -63,8 +63,9 @@ public class DFA {
         }
 
         return new DFA(unionTable, temp.stream().mapToInt(i -> i).toArray());
-    } //*/
+    } 
 
+    // creates a DFA that accepts the intersection of M1 and M2 (M1 & M2)
     public static DFA intersection(DFA m1, DFA m2) {
 
         // create a new array of final states that contains the intersection of the final states of the two input DFAs
@@ -121,6 +122,7 @@ public class DFA {
         return false;
     }
 
+    // combines the transition tables of two DFAs for the union or intersection of the two
     public static int[][] combineTransitionTables(DFA m1, DFA m2) {
     	
     	// create a new table that is the size of the combined transition table
@@ -146,7 +148,7 @@ public class DFA {
         return combinedTable;
         
 
-    } //*/
+    } 
 }
 
 
