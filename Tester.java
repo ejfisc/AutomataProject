@@ -134,6 +134,15 @@ public class Tester {
 		tTwelve[0][0] = 0;
 		int[] fTwelve = {0, 1};
 
+		// A DFA with the same language as ten (empty, 0, 1) but with different state structure
+		int[][] tThirteen = new int[4][2];
+		tThirteen[0][0] = 1;
+		tThirteen[0][1] = 2;
+		tThirteen[1][0] = tThirteen[1][1] = 3;
+		tThirteen[2][0] = tThirteen[2][1] = 3;
+		tThirteen[3][0] = tThirteen[3][1] = 3;
+		int[] fThirteen = {0, 1, 2};
+
         DFA one = new DFA(tOne, fOne);
         DFA two = new DFA(tTwo, fTwo);
         DFA three = new DFA(tThree, fThree);
@@ -146,6 +155,8 @@ public class Tester {
 		DFA ten = new DFA(tTen, fTen);
 		DFA eleven = new DFA(tEleven, fEleven);
 		DFA twelve = new DFA(tTwelve, fTwelve);
+		DFA thirteen = new DFA(tThirteen, fThirteen);
+
 
         int testsPassed = 0;
         int testsRan = 0;
@@ -272,25 +283,25 @@ public class Tester {
 				new boolean[]{true, false, true, true, true, false});
         testsRan += testStrings.length;
         
-		testsPassed += emptyChecker(new DFA[]{one, two, three, four, five, six, seven, eight, nine, ten, eleven, twelve},
-								new boolean[]{false, false, false, false, false, false, true, false, false, false, false, false});
-		testsRan += 12;
+		testsPassed += emptyChecker(new DFA[]{one, two, three, four, five, six, seven, eight, nine, ten, eleven, twelve, thirteen},
+								new boolean[]{false, false, false, false, false, false, true, false, false, false, false, false, false});
+		testsRan += 13;
 
-		testsPassed += universalChecker(new DFA[]{one, two, three, four, five, six, seven, eight, nine, ten, eleven, twelve},
-									new boolean[]{false, false, false, false, false, false, false, false, false, false, false, true});
-		testsRan += 12;
+		testsPassed += universalChecker(new DFA[]{one, two, three, four, five, six, seven, eight, nine, ten, eleven, twelve, thirteen},
+									new boolean[]{false, false, false, false, false, false, false, false, false, false, false, true, false});
+		testsRan += 13;
 
-		testsPassed += infiniteChecker(new DFA[]{one, two, three, four, five, six, seven, eight, nine, ten, eleven, twelve},
-									new boolean[]{true, true, true, true, false, true, false, true, true, false, false, true});
-		testsRan += 12;
+		testsPassed += infiniteChecker(new DFA[]{one, two, three, four, five, six, seven, eight, nine, ten, eleven, twelve, thirteen},
+									new boolean[]{true, true, true, true, false, true, false, true, true, false, false, true, false});
+		testsRan += 13;
 
-		testsPassed += subsetChecker(new DFA[][]{{ten, eight}, {eleven, one}, {one, two}, {seven, twelve}},
-				new boolean[]{false, true, false, true});
-		testsRan += 4;
+		testsPassed += subsetChecker(new DFA[][]{{eight, ten}, {eleven, one}, {one, two}, {seven, twelve}, {ten, thirteen}},
+				new boolean[]{false, true, false, true, true});
+		testsRan += 5;
 
-		testsPassed += equalsChecker(new DFA[][]{{ten, eight}, {eleven, one}, {one, two}, {seven, twelve}},
-				new boolean[]{false, false, false, false});
-		testsRan += 4;
+		testsPassed += equalsChecker(new DFA[][]{{ten, eight}, {eleven, one}, {one, two}, {seven, twelve}, {ten, thirteen}},
+				new boolean[]{false, false, false, false, true});
+		testsRan += 5;
 
 		System.out.println();
 		for(int i = 0; i < failed.size(); i++)
@@ -382,9 +393,9 @@ public class Tester {
 		for(int i = 0; i < dfaList.length; i++) {
 			if(dfaList[i][0].equals(dfaList[i][1]) != desiredTestResults[i]) {
 				if(desiredTestResults[i])
-					failed.add("The DFAs in pair [" + i + "] incorrectly stated they were NOT equal\n");
+					failed.add("The DFAs in pair [" + (i+1) + "] incorrectly stated they were NOT equal\n");
 				else
-					failed.add("The DFAs in pair [" + i + "] incorrectly stated they were equal\n");
+					failed.add("The DFAs in pair [" + (i+1) + "] incorrectly stated they were equal\n");
 			}
 			else
 				testsPassed++;
@@ -398,9 +409,9 @@ public class Tester {
 		for(int i = 0; i < dfaList.length; i++) {
 			if(dfaList[i][0].isSubsetOf(dfaList[i][1]) != desiredTestResults[i]) {
 				if(desiredTestResults[i])
-					failed.add("The first DFA in pair [" + i + "] incorrectly stated it was NOT a subset\n");
+					failed.add("The first DFA in pair [" + (i+1) + "] incorrectly stated it was NOT a subset\n");
 				else
-					failed.add("The first DFA in pair [" + i + "] incorrectly stated it was a subset\n");
+					failed.add("The first DFA in pair [" + (i+1) + "] incorrectly stated it was a subset\n");
 			}
 			else
 				testsPassed++;
