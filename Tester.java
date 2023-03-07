@@ -284,7 +284,7 @@ public class Tester {
 									new boolean[]{true, true, true, true, false, true, false, true, true, false, false, true});
 		testsRan += 12;
 
-		testsPassed += subsetChecker(new DFA[][]{{eight, ten}, {eleven, one}, {one, two}, {seven, twelve}},
+		testsPassed += subsetChecker(new DFA[][]{{ten, eight}, {eleven, one}, {one, two}, {seven, twelve}},
 				new boolean[]{false, true, false, true});
 		testsRan += 4;
 
@@ -334,9 +334,9 @@ public class Tester {
 		for(int i = 0; i < dfaList.length; i++) {
 			if(dfaList[i].isEmptyLanguage() != desiredTestResults[i]) {
 				if(desiredTestResults[i])
-					failed.add("DFA " + i + ": incorrectly stated it was NOT empty\n");
+					failed.add("DFA " + (i+1) + ": incorrectly stated it was NOT empty\n");
 				else
-					failed.add("DFA " + i + ": incorrectly stated it was empty\n");
+					failed.add("DFA " + (i+1) + ": incorrectly stated it was empty\n");
 			}
 			else
 				testsPassed++;
@@ -350,9 +350,9 @@ public class Tester {
 		for(int i = 0; i < dfaList.length; i++) {
 			if(dfaList[i].isUniversalLanguage() != desiredTestResults[i]) {
 				if(desiredTestResults[i])
-					failed.add("DFA " + i + ": incorrectly stated it was NOT universal\n");
+					failed.add("DFA " + (i+1) + ": incorrectly stated it was NOT universal\n");
 				else
-					failed.add("DFA " + i + ": incorrectly stated it was universal\n");
+					failed.add("DFA " + (i+1) + ": incorrectly stated it was universal\n");
 			}
 			else
 				testsPassed++;
@@ -366,9 +366,9 @@ public class Tester {
 		for(int i = 0; i < dfaList.length; i++) {
 			if(dfaList[i].isInfinite() != desiredTestResults[i]) {
 				if(desiredTestResults[i])
-					failed.add("DFA " + i + ": incorrectly stated it was NOT infinite\n");
+					failed.add("DFA " + (i+1) + ": incorrectly stated it was NOT infinite\n");
 				else
-					failed.add("DFA " + i + ": incorrectly stated it was infinite\n");
+					failed.add("DFA " + (i+1) + ": incorrectly stated it was infinite\n");
 			}
 			else
 				testsPassed++;

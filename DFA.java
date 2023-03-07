@@ -28,7 +28,7 @@ public class DFA {
 
     // credits function, prints out names of the group members (so that the grader can easily see who contributed while running the Tester class)
     public static String credits() {
-        return "Credits: Ethan Fischer, John Lawler, Luke Wells";
+        return "Ethan Fischer, John Lawler, Luke Wells";
     }
     
     // determine if the input string will be accepted (true) or rejected (false) by the automata
@@ -127,19 +127,12 @@ public class DFA {
 
     // determines if the language of the DFA is universal
     public boolean isUniversalLanguage() {
-        // check if all binary bit strings of the same length as the transition table are accepted by the DFA
-        int inputLength = transitionTable[0].length;
-        for(int i = 0; i < (i << inputLength); i++) { // iterate over all binary bit strings
-            int state = 0; // start at the init state
-            for(int j = 0; j < inputLength; j++) {
-                int input = (i >> j) & 1; // extract the jth bit of i
-                state = transitionTable[state][input]; // transition to the next state
-            }
-            if(!contains(finalStates, state)) {
-                return false; // if the final state is not reached, the string is not accepted, so the language is not universal
+        for(int i = 0; i < transitionTable.length; i++) {
+            if(!contains(finalStates, i)) {
+                return false; // found a non-final state, language is not universal
             }
         }
-        return true; // all binary bit strings of the same length as the transition table are accepted, so the langauge is universal
+        return true; // each state is a final state, language is universal
     }
 
     // checks for loops in the DFA to determine if the language is infinite or not
