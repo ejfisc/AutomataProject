@@ -9,7 +9,6 @@
  *************************************************************/
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class DFA {
 
@@ -200,28 +199,27 @@ public class DFA {
 
     // determines if the language of this DFA is a subset of the given DFA
     public boolean isSubsetOf(DFA m2) {
-        // Check if every string accepted by this DFA is also accepted by m2
-        for (int i = 0; i < this.transitionTable.length; i++) {
-            // Check if the current state is a final state in both DFAs or not
-            boolean isFinalInM1 = contains(this.finalStates, i);
-            boolean isFinalInM2 = contains(m2.finalStates, i);
-            if (isFinalInM1 && !isFinalInM2) {
-                // If this DFA has a final state that m2 doesn't, it's not a subset
-                return false;
-            }
-            
-            // Check if the transitions are the same for each input symbol
-            for (int j = 0; j < this.transitionTable[i].length; j++) {
-                int nextStateInThis = this.transitionTable[i][j];
-                int nextStateInM2 = m2.transitionTable[i][j];
-                if (nextStateInThis != nextStateInM2) {
-                    // If the next state is different in the two DFAs, it's not a subset
+        // // If we've checked every state and transition and haven't returned false, this DFA is a subset
+        // return true;
+        // Check that the alphabets of both DFAs are the same
+        int minStates = Math.min(transitionTable.length, m2.transitionTable.length);
+        int minInputs = Math.min(transitionTable[0].length, m2.transitionTable[0].length);
+
+        // Iterate over the transition tables of both DFAs using the minimum size
+        for (int i = 0; i < minStates; i++) {
+            for (int j = 0; j < minInputs; j++) {
+                int nextState1 = transitionTable[i][j];
+                int nextState2 = m2.transitionTable[i][j];
+                
+                // If the current input symbol takes us to different states, return false
+                if (nextState1 != nextState2) {
                     return false;
                 }
             }
         }
-    
-        // If we've checked every state and transition and haven't returned false, this DFA is a subset
+        
+        // If we reach here, it means all transitions in the current DFA are also in m2,
+        // so the language of the current DFA is a subset of the language of m2
         return true;
     }
     
