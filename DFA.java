@@ -13,8 +13,8 @@ import java.lang.Math;
 
 public class DFA {
 
-    private int[][] transitionTable; // transitionTable[currentState][input] = nextState
-    private int[] finalStates;
+    int[][] transitionTable; // transitionTable[currentState][input] = nextState
+    int[] finalStates;
     private int initState;
 
     // constructor takes in a transition array and array of finalStates
@@ -325,21 +325,14 @@ public class DFA {
                 // isolate transition function
                 String transFn = b.substring(currIndex, currIndex+2);
                 currIndex += 2;
-                transMatrix[i][j] = transFn;
-            }
-        }
-
-        // decode transMatrix into transitionTable
-        for(int i = 0; i < numOfStates; i++) {
-            for(int j = 0; j < numOfStates; j++) {
-                if(transMatrix[i][j] == "11") { // both 0 and 1 transition from i to j
+                if(transFn == "11") { // both 0 and 1 transition from i to j
                     transitionTable[i][0] = j;
                     transitionTable[i][1] = j;
                 }
-                if(transMatrix[i][j] == "10") { // 0 transition from i to j
+                if(transFn == "10") { // 0 transition from i to j
                     transitionTable[i][0] = j;
                 }
-                if(transMatrix[i][j] == "01") { // 1 transition from i to j
+                if(transFn == "01") { // 1 transition from i to j
                     transitionTable[i][1] = j;
                 }
                 // if transMatrix[i][j] == '00' we don't need to set anything in the transitionTable
@@ -352,6 +345,31 @@ public class DFA {
 
     //Checks if DFA is exactly same as object
     public boolean identical(DFA d){
+        // Check if both DFAs have the same number of states
+        if (d.transitionTable.length != transitionTable.length) {
+            return false;
+        }
+    
+        // Check if both DFAs have the same number of final states
+        if (d.finalStates.length != finalStates.length) {
+            return false;
+        }
+    
+        // Check if final states are the same
+        for (int i = 0; i < finalStates.length; i++) {
+            if (d.finalStates[i] != finalStates[i]) {
+                return false;
+            }
+        }
+    
+        // Check if transition table is the same
+        for (int i = 0; i < transitionTable.length; i++) {
+            if(transitionTable[i][0] != d.transitionTable[i][0] || transitionTable[i][1] != d.transitionTable[i][1]) {
+                return false;
+            }
+        }
+    
+        // If all checks pass, the DFAs are identical
         return true;
     }
     
