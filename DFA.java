@@ -9,6 +9,7 @@
  *************************************************************/
 
 import java.util.ArrayList;
+import java.lang.Math;
 
 public class DFA {
 
@@ -216,16 +217,137 @@ public class DFA {
         return true;
     }
 
-    //Takes DFA, encodes it into a bitstring
+    // Takes DFA, encodes it into a bitstring
     public static String compress(DFA d){
-        String ret = "";
-        return ret;
+        StringBuilder bitString = new StringBuilder();
+
+        // turn # of states into binary
+        int numOfStates = d.transitionTable.length;
+        String numOfStatesStr = Integer.toBinaryString(numOfStates);
+        // append # of states to bit string in 3-bit format (max number of states in the tester is 6, so we don't need more than 3 bits)
+        if(numOfStatesStr.length() == 3) { // # of states >= 4
+            bitString.append(numOfStatesStr);
+        }
+        else if(numOfStatesStr.length() == 2) { // # of states >= 2 (since all of the test DFAs have at least 2 states, we can stop here)
+            bitString.append("0" + numOfStatesStr);
+        }
+
+        // turn # of final states into binary
+        int numOfFinalStates = d.finalStates.length;
+        String numOfFinalStatesStr = Integer.toBinaryString(numOfFinalStates);
+        // append # of final states to bit string in 2 bit format (max number of final states in the tester is 3, so we don't need more than 2 bits)
+        if(numOfFinalStatesStr.length() == 2) { // # of final states >= 2
+            bitString.append(numOfFinalStatesStr);
+        }
+        else if(numOfFinalStatesStr.length() == 1) { // # of final states == 1 (at least 1 final state is required, can't be 0)
+            bitString.append("0" + numOfFinalStatesStr);
+        }
+
+        // add final states to binary string
+        for(int state : d.finalStates) {
+            // turn state into binary
+            String stateStr = Integer.toBinaryString(state);
+            // append final state to bit string in 3 bit format (highest final state in tester is 4 so we need at least 3 bits per final state)
+            if(stateStr.length() == 3) { // final state >= 4
+                bitString.append(stateStr);
+            }
+            else if(stateStr.length() == 2) { // final state >= 2
+                bitString.append("0" + stateStr);
+            }
+            else if(stateStr.length() == 1) { // finalState >= 0 and 
+                bitString.append("00" + stateStr);
+            }
+        }
+
+        // add transition table to binary string
+
+        // 1. turn transition table int n x n matrix where at matrix[i][j] is a 2 bit binary string that tells us if there is a 0 or 1 transition from state i to j
+        // 00 would be no transition, 10 would be a zero transition, 01, would be a 1 transition, 11 would be both transiton
+        // 2. append the matrix to the bit string going row by row starting at 0,0 to n,n
+
+        String[][] transMatrix = new String[numOfStates][numOfStates];
+        for(int i = 0; i < numOfStates; i++) {
+            for(int j = 0; j < numOfStates; j++) {
+                if(d.transitionTable[i][0] == j && d.transitionTable[i][1] == j) {
+                    transMatrix[i][j] = "11";
+                }
+                if(d.transitionTable[i][0] == j && d.transitionTable[i][1] != j) {
+                    transMatrix[i][j] = "10";
+                }
+                if(d.transitionTable[i][0] != j && d.transitionTable[i][1] == j) {
+                    transMatrix[i][j] = "01";
+                }
+                if(d.transitionTable[i][0] != j && d.transitionTable[i][1] != j) {
+                    transMatrix[i][j] = "00";
+                }
+                bitString.append(transMatrix[i][j]); // append each row,col to the bit string
+            }
+        }
+
+        return bitString.toString(); // return the encoded bit string
     }
 
     //Takes bitstring, decodes it into DFA
     public static DFA decompress(String b){
-        DFA ret;
-        return ret;
+        int currIndex = 0;
+        // isolate # of states
+        String numOfStatesStr = b.substring(currIndex, currIndex+3);
+        currIndex += 3;
+        // decode # of states
+        int numOfStates = Integer.parseInt(numOfStatesStr, 2);
+
+        // isolate # of final states
+        String numOfFinalStatesStr = b.substring(currIndex, currIndex+2);
+        currIndex += 2;
+        // decode # of final states
+        int numOfFinalStates = Integer.parseInt(numOfFinalStatesStr, 2);
+
+        // define final state array
+        int[] finalStates = new int[numOfFinalStates];
+
+        // decode final states
+        for(int i = 0; i < numOfFinalStates; i++) {
+            // isolate final state
+            String finalStateStr = b.substring(currIndex, currIndex+3);
+            currIndex += 3;
+            // decode final state
+            finalStates[i] = Integer.parseInt(finalStateStr, 2);
+        }
+
+        // define transition table
+        int[][] transitionTable = new int[numOfStates][2];
+
+        String[][] transMatrix = new String[numOfStates][numOfStates];
+
+        // decode transMatrix
+        for(int i = 0; i < numOfStates; i++) {
+            for(int j = 0; j < numOfStates; j++) {
+                // isolate transition function
+                String transFn = b.substring(currIndex, currIndex+2);
+                currIndex += 2;
+                transMatrix[i][j] = transFn;
+            }
+        }
+
+        // decode transMatrix into transitionTable
+        for(int i = 0; i < numOfStates; i++) {
+            for(int j = 0; j < numOfStates; j++) {
+                if(transMatrix[i][j] == "11") { // both 0 and 1 transition from i to j
+                    transitionTable[i][0] = j;
+                    transitionTable[i][1] = j;
+                }
+                if(transMatrix[i][j] == "10") { // 0 transition from i to j
+                    transitionTable[i][0] = j;
+                }
+                if(transMatrix[i][j] == "01") { // 1 transition from i to j
+                    transitionTable[i][1] = j;
+                }
+                // if transMatrix[i][j] == '00' we don't need to set anything in the transitionTable
+            }
+        }
+
+        return new DFA(transitionTable, finalStates);
+
     }
 
     //Checks if DFA is exactly same as object
