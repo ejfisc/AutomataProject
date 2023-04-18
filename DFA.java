@@ -215,6 +215,23 @@ public class DFA {
         // so the language of the current DFA is a subset of the language of m2
         return true;
     }
+
+    //Takes DFA, encodes it into a bitstring
+    public static String compress(DFA d){
+        String ret = "";
+        return ret;
+    }
+
+    //Takes bitstring, decodes it into DFA
+    public static DFA decompress(String b){
+        DFA ret;
+        return ret;
+    }
+
+    //Checks if DFA is exactly same as object
+    public boolean identical(DFA d){
+        return true;
+    }
     
     /*-----------------------------------------------------
      * Private Helper Methods
