@@ -218,18 +218,108 @@ public class DFA {
 
     //Takes DFA, encodes it into a bitstring
     public static String compress(DFA d){
-        String ret = "";
-        return ret;
+        int n = d.transitionTable.length;
+        StringBuilder sb = new StringBuilder();
+
+        // Encode number of states
+        sb.append(String.format("%02d", n));
+
+        // Encode initial state
+        if(contains(d.finalStates, d.initState))
+            sb.append(1);
+        else
+            sb.append(0);
+
+        // Encode transitions
+        for(int i=0; i<n; i++) {
+            for(int j=0; j<2; j++) { // assume binary alphabet
+                int nextState = d.transitionTable[i][j];
+                String binCurrState = String.format("%0" + (n-1) + "d", Integer.parseInt(Integer.toBinaryString(i)));
+                String binInput = String.format("%01d", j);
+                String binNextState = String.format("%0" + (n-1) + "d", Integer.parseInt(Integer.toBinaryString(nextState)));
+                String concatBin = binCurrState + binInput + binNextState;
+                int decimalValue = Integer.parseInt(concatBin, 2);
+                String binString = String.format("%0" + 6*(n-1) + "d", Integer.parseInt(Integer.toBinaryString(decimalValue)));
+                sb.append(binString);
+            }
+        }
+
+        // Encode final states
+        for(int i=0; i<n; i++) {
+            if(contains(d.finalStates, i))
+                sb.append(1);
+            else
+                sb.append(0);
+        }
+
+        return sb.toString();
+
     }
 
-    //Takes bitstring, decodes it into DFA
+
+    // Takes bitstring, decodes it into DFA
     public static DFA decompress(String b){
-        DFA ret;
-        return ret;
+        int n = Integer.parseInt(b.substring(0, 2));
+        int[][] transitionTable = new int[n][2];
+        int[] finalStates = new int[n];
+        
+        // Decode transitions
+        int currIndex = 3;
+        for(int i=0; i<n; i++) {
+            for(int j=0; j<2; j++) {
+                String binString = b.substring(currIndex, currIndex+6*(n-1));
+                int decimalValue = Integer.parseInt(binString, 2);
+                String binCurrState = String.format("%0" + (n-1) + "d", Integer.parseInt(Integer.toBinaryString(i)));
+                String binInput = String.format("%01d", j);
+                String binNextState = String.format("%0" + (n-1) + "d", Integer.parseInt(Integer.toBinaryString(decimalValue)));
+                String concatBin = binCurrState + binInput + binNextState;
+                transitionTable[i][j] = Integer.parseInt(concatBin, 2);
+                currIndex += 6*(n-1);
+            }
+        }
+    
+        //Decode final states
+        for(int i=0; i<n; i++) {
+            if(b.charAt(currIndex) == '1')
+                finalStates[i] = i;
+            currIndex++;
+        }
+    
+        return new DFA(transitionTable, finalStates);
     }
+
 
     //Checks if DFA is exactly same as object
     public boolean identical(DFA d){
+        // Check if both DFAs have the same number of states
+        if (d.transitionTable.length != transitionTable.length) {
+            return false;
+        }
+    
+        // Check if both DFAs have the same number of final states
+        if (d.finalStates.length != finalStates.length) {
+            return false;
+        }
+    
+        // Check if final states are the same
+        for (int i = 0; i < finalStates.length; i++) {
+            if (d.finalStates[i] != finalStates[i]) {
+                return false;
+            }
+        }
+    
+        // Check if transition table is the same
+        for (int i = 0; i < transitionTable.length; i++) {
+            for (int j = 0; j < transitionTable[0].length; j++) {
+                int nextState1 = d.transitionTable[i][j];
+                int nextState2 = transitionTable[i][j];
+                if (nextState1 != nextState2) {
+                    return false;
+                }
+            }
+        }
+    
+        // If all checks pass, the DFAs are identical
         return true;
     }
     
