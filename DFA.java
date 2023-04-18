@@ -262,7 +262,7 @@ public class DFA {
         int n = Integer.parseInt(b.substring(0, 2));
         int[][] transitionTable = new int[n][2];
         int[] finalStates = new int[n];
-        
+
         // Decode transitions
         int currIndex = 3;
         for(int i=0; i<n; i++) {
@@ -277,14 +277,14 @@ public class DFA {
                 currIndex += 6*(n-1);
             }
         }
-    
+
         //Decode final states
         for(int i=0; i<n; i++) {
             if(b.charAt(currIndex) == '1')
                 finalStates[i] = i;
             currIndex++;
         }
-    
+
         return new DFA(transitionTable, finalStates);
     }
 
